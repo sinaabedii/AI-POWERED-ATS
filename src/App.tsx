@@ -19,6 +19,7 @@ import { SettingsPage } from './pages/dashboard/SettingsPage';
 import { LoginPage } from './pages/auth/Login';
 import { RegisterPage } from './pages/auth/Register';
 import { ProtectedRoute } from './pages/auth/ProtectedRoute';
+import { JobDetailPage } from './pages/public/JobDetailPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/jobs/:id" element={<JobDetailPage />} />
             <Route path="/about" element={<AboutPage />} />
             
             {/* Auth Routes */}
