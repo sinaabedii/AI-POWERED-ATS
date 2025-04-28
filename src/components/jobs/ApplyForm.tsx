@@ -34,7 +34,7 @@ export function ApplyForm({ job }: ApplyFormProps) {
     formState: { errors },
   } = useForm<ApplyFormData>();
 
-  const onSubmit = async (data: ApplyFormData) => {
+  const onSubmit = async () => {
     try {
       setIsSubmitting(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
