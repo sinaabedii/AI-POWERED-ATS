@@ -1,26 +1,31 @@
-import { useState, useEffect } from 'react';
-import { Applicant, ApplicationStatus } from '../../types/applicant';
-import { Card, CardContent, CardHeader, CardTitle } from '../common/Card';
-import { Badge } from '../common/Badge';
-import { getApplicants } from '../../services/mockData';
-import { Avatar } from '../common/Avatar';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../common/Card";
+import { Badge } from "../common/Badge";
+import {
+  getApplications,
+  getApplicationsByJobId,
+} from "../../services/mockData";
+import { Avatar } from "../common/Avatar";
+import { Application, ApplicationStatus } from "../../types/applicant";
 
 interface ApplicantsListProps {
   jobId?: string;
 }
 
 export function ApplicantsList({ jobId }: ApplicantsListProps) {
-  const [applicants, setApplicants] = useState<Applicant[]>([]);
+  const [applicants, setApplicants] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
         setIsLoading(true);
-        const data = await getApplicants(jobId);
+        const data = jobId
+          ? await getApplicationsByJobId(jobId)
+          : await getApplications();
         setApplicants(data);
       } catch (error) {
-        console.error('Error fetching applicants:', error);
+        console.error("Error fetching applicants:", error);
       } finally {
         setIsLoading(false);
       }
@@ -31,22 +36,22 @@ export function ApplicantsList({ jobId }: ApplicantsListProps) {
 
   const getStatusBadgeVariant = (status: ApplicationStatus) => {
     switch (status) {
-      case 'pending':
-        return 'secondary';
-      case 'screening':
-        return 'info';
-      case 'interview':
-        return 'warning';
-      case 'technical':
-        return 'warning';
-      case 'offer':
-        return 'success';
-      case 'hired':
-        return 'success';
-      case 'rejected':
-        return 'danger';
+      case "pending":
+        return "secondary";
+      case "reviewed":
+        return "info";
+      case "interview":
+        return "warning";
+      case "shortlisted":
+        return "warning";
+      case "offered":
+        return "success";
+      case "hired":
+        return "success";
+      case "rejected":
+        return "danger";
       default:
-        return 'secondary';
+        return "secondary";
     }
   };
 
@@ -55,7 +60,9 @@ export function ApplicantsList({ jobId }: ApplicantsListProps) {
       <div className="flex h-48 items-center justify-center">
         <div className="text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary-500 border-t-transparent mx-auto"></div>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Loading applicants...</p>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Loading applicants...
+          </p>
         </div>
       </div>
     );
@@ -66,8 +73,10 @@ export function ApplicantsList({ jobId }: ApplicantsListProps) {
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-10">
           <p className="text-center text-gray-500 dark:text-gray-400">
-            No applicants found. 
-            {jobId ? ' This job has no applications yet.' : ' Add a job to receive applications.'}
+            No applicants found.
+            {jobId
+              ? " This job has no applications yet."
+              : " Add a job to receive applications."}
           </p>
         </CardContent>
       </Card>
@@ -94,7 +103,10 @@ export function ApplicantsList({ jobId }: ApplicantsListProps) {
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {applicants.map((applicant) => (
-                <tr key={applicant.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                <tr
+                  key={applicant.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
                       <Avatar
@@ -114,17 +126,23 @@ export function ApplicantsList({ jobId }: ApplicantsListProps) {
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
-                    {applicant.jobId === "1" ? "General Accountant" : 
-                     applicant.jobId === "2" ? "Software Engineer (Golang)" :
-                     applicant.jobId === "3" ? "Junior User Researcher" : 
-                     applicant.jobId === "4" ? "Support Engineer" : "Unknown Position"}
+                    {applicant.jobId === "1"
+                      ? "General Accountant"
+                      : applicant.jobId === "2"
+                      ? "Software Engineer (Golang)"
+                      : applicant.jobId === "3"
+                      ? "Junior User Researcher"
+                      : applicant.jobId === "4"
+                      ? "Support Engineer"
+                      : "Unknown Position"}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                     {new Date(applicant.appliedDate).toLocaleDateString()}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <Badge variant={getStatusBadgeVariant(applicant.status)}>
-                      {applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}
+                      {applicant.status.charAt(0).toUpperCase() +
+                        applicant.status.slice(1)}
                     </Badge>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">

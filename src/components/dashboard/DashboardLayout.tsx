@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
   BriefcaseIcon,
@@ -8,9 +8,12 @@ import {
   Cog6ToothIcon,
   Bars3Icon,
   XMarkIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import { clsx } from "clsx";
 import { ThemeToggle } from "../common/ThemeToggle";
+import { useAuth } from "../../contexts/AuthContext";
+import { Button } from "../common/Button";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -19,17 +22,40 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, logout } = useAuth();
 
-  const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
-    { name: "Jobs", href: "/dashboard/jobs", icon: BriefcaseIcon },
-    { name: "Applicants", href: "/dashboard/applicants", icon: UserGroupIcon },
-    { name: "Analytics", href: "/dashboard/analytics", icon: ChartBarIcon },
-    { name: "Settings", href: "/dashboard/settings", icon: Cog6ToothIcon },
-  ];
+  const navigation = isAdmin
+    ? [
+        { name: "Dashboard", href: "/dashboard/admin", icon: HomeIcon },
+        { name: "Jobs", href: "/dashboard/jobs", icon: BriefcaseIcon },
+        {
+          name: "Applicants",
+          href: "/dashboard/applicants",
+          icon: UserGroupIcon,
+        },
+        { name: "Analytics", href: "/dashboard/analytics", icon: ChartBarIcon },
+        { name: "Settings", href: "/dashboard/settings", icon: Cog6ToothIcon },
+      ]
+    : [
+        { name: "Dashboard", href: "/dashboard/user", icon: HomeIcon },
+        {
+          name: "My Applications",
+          href: "/dashboard/user",
+          icon: DocumentTextIcon,
+        },
+        { name: "Settings", href: "/dashboard/settings", icon: Cog6ToothIcon },
+      ];
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return (
+      location.pathname === path || location.pathname.startsWith(`${path}/`)
+    );
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   return (
@@ -100,6 +126,27 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   {item.name}
                 </Link>
               ))}
+
+              <button
+                onClick={handleLogout}
+                className="group flex w-full items-center rounded-md px-2 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <svg
+                  className="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                Sign out
+              </button>
             </nav>
           </div>
         </div>
@@ -116,6 +163,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               >
                 ATS System
               </Link>
+            </div>
+            <div className="mt-2 px-4">
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Logged in as:
+              </div>
+              <div className="font-medium text-gray-900 dark:text-white">
+                {user?.name}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                {isAdmin ? "Admin" : "User"}
+              </div>
             </div>
             <nav className="mt-5 flex-1 space-y-1 px-2">
               {navigation.map((item) => (
@@ -141,6 +199,27 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   {item.name}
                 </Link>
               ))}
+
+              <button
+                onClick={handleLogout}
+                className="group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <svg
+                  className="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                Sign out
+              </button>
             </nav>
           </div>
         </div>
@@ -159,8 +238,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
 
         <header className="bg-white shadow dark:bg-gray-800">
-          <div className="flex h-16 items-center justify-end px-4 sm:px-6 md:px-8">
-            <ThemeToggle />
+          <div className="flex h-16 items-center justify-between px-4 sm:px-6 md:px-8">
+            <div className="flex-1"></div>
+            <div className="flex items-center">
+              <ThemeToggle />
+              <Link to="/" className="ml-4">
+                <Button variant="outline" size="sm">
+                  Back to Home
+                </Button>
+              </Link>
+            </div>
           </div>
         </header>
 

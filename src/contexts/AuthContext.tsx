@@ -1,30 +1,42 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
+export type UserRole = 'admin' | 'user';
+
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'hr' | 'recruiter';
+  role: UserRole;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (name: string, email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string, role?: UserRole) => Promise<boolean>;
   logout: () => void;
   error: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const PREDEFINED_USER = {
-  id: '1',
-  name: 'Admin User',
-  email: 'admin@example.com',
-  password: 'admin123',      
-  role: 'admin' as const,
-};
+const PREDEFINED_USERS = [
+  {
+    id: '1',
+    name: 'Admin User',
+    email: 'admin@example.com',
+    password: 'admin123',
+    role: 'admin' as UserRole,
+  },
+  {
+    id: '2',
+    name: 'Regular User',
+    email: 'user@example.com',
+    password: 'user123',
+    role: 'user' as UserRole,
+  }
+];
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -34,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedUser = localStorage.getItem('ats_user');
     if (storedUser) {
       try {
-        const parsedUser = JSON.parse(storedUser) as User;
+        const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
       } catch (error) {
         console.error('Failed to parse stored user:', error);
@@ -43,46 +55,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const isAdmin = user?.role === 'admin';
+
   const login = async (email: string, password: string): Promise<boolean> => {
     setError(null);
-    
     await new Promise(resolve => setTimeout(resolve, 800));
     
     try {
-      if (email === PREDEFINED_USER.email && password === PREDEFINED_USER.password) {
-        const { password: _, ...userWithoutPassword } = PREDEFINED_USER;
+      const foundUser = PREDEFINED_USERS.find(u => u.email === email && u.password === password);
+      
+      if (foundUser) {
+        const { password: _, ...userWithoutPassword } = foundUser;
         setUser(userWithoutPassword);
         localStorage.setItem('ats_user', JSON.stringify(userWithoutPassword));
         return true;
       } else {
-        setError('ایمیل یا رمز عبور نامعتبر است');
+        setError('Invalid email or password');
         return false;
       }
     } catch (error) {
-      console.error('خطا در ورود:', error);
-      setError('خطایی در هنگام ورود رخ داد');
+      console.error('Login error:', error);
+      setError('An error occurred during login');
       return false;
     }
   };
 
-  const register = async (
-    _name: string,
-    email: string,
-    _password: string
-  ): Promise<boolean> => {
+  const register = async (_name: string, email: string, _password: string, _role: UserRole = 'user'): Promise<boolean> => {
     setError(null);
     
     await new Promise(resolve => setTimeout(resolve, 800));
+    
     try {
-      if (email === PREDEFINED_USER.email) {
-        setError('این ایمیل قبلا ثبت شده است');
+      if (PREDEFINED_USERS.some(u => u.email === email)) {
+        setError('Email already exists');
         return false;
       }
-      alert('ثبت نام موفقیت آمیز بود! اکنون می‌توانید وارد شوید.\n\nدر نسخه واقعی، این بخش کاربر جدید را در پایگاه داده ایجاد می‌کند.');
+      alert('Registration successful! You can now login with your credentials.\n\nIn a real app, this would create a new user in the database.');
       return true;
     } catch (error) {
-      console.error('خطا در ثبت نام:', error);
-      setError('خطایی در هنگام ثبت نام رخ داد');
+      console.error('Registration error:', error);
+      setError('An error occurred during registration');
       return false;
     }
   };
@@ -93,16 +105,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        login,
-        register,
-        logout,
-        error
-      }}
-    >
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated: !!user, 
+      isAdmin,
+      login, 
+      register, 
+      logout, 
+      error 
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -112,7 +123,7 @@ export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   
   if (context === undefined) {
-    throw new Error('useAuth باید داخل AuthProvider استفاده شود');
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   
   return context;

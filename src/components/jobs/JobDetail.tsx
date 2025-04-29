@@ -21,9 +21,9 @@ export function JobDetail({ job }: JobDetailProps) {
         <CardHeader>
           <CardTitle>About Company</CardTitle>
         </CardHeader>
-        <CardContent>
+        {/* <CardContent>
           <p className="text-gray-700 dark:text-gray-300">{job.about}</p>
-        </CardContent>
+        </CardContent> */}
       </Card>
       
       <Card>

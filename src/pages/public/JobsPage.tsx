@@ -1,5 +1,5 @@
-import { PageLayout } from "../../components/layout/PageLayout";
 import { JobsList } from "../../components/jobs/JobsList";
+import { PageLayout } from "../../components/layout/PageLayout";
 
 export function JobsPage() {
   return (

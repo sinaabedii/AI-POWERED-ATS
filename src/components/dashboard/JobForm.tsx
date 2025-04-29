@@ -37,11 +37,11 @@ export function JobForm({ job, onSubmit, isSubmitting }: JobFormProps) {
   });
 
   const [responsibilities, setResponsibilities] = useState<string[]>(
-    job?.responsibilities || [""]
+    job?.responsibilities ?? [""]
   );
 
   const [requirements, setRequirements] = useState<string[]>(
-    job?.requirements || [""]
+    job?.requirements ?? [""]
   );
 
   const addResponsibility = () => {

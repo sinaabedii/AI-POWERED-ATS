@@ -1,24 +1,26 @@
 export type ApplicationStatus = 
   | 'pending'
-  | 'screening'
+  | 'reviewed'
+  | 'shortlisted'
   | 'interview'
-  | 'technical'
-  | 'offer'
-  | 'hired'
-  | 'rejected';
+  | 'offered'
+  | 'rejected'
+  | 'hired';
 
-export interface Applicant {
+export interface Application {
   id: string;
   jobId: string;
+  userId: string; 
   fullName: string;
   email: string;
   phoneNumber: string;
   resumeUrl: string;
-  photoUrl?: string;
   coverLetter?: string;
   status: ApplicationStatus;
   appliedDate: string;
   skills: string[];
   experience: number;
-  matchScore?: number;
+  matchScore?: number; 
+  notes?: string; 
+  photoUrl?: string;
 }

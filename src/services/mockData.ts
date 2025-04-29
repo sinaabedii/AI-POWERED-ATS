@@ -1,323 +1,311 @@
-import { Job, JobCategory } from "../types/job";
-import { Applicant } from "../types/applicant";
-import { Company } from "../types/company";
+import { Application } from '../types/applicant';
+import { Company } from '../types/company';
+import { Job, JobCategory } from '../types/job';
 
-export const mockJobs: Job[] = [
+
+const mockJobs: Job[] = [
   {
-    id: "1",
-    title: "General Accountant",
-    category: "Finance",
-    location: "Tehran, Tehran, Iran, Islamic Republic of",
-    description:
-      "We are seeking a highly motivated and detail-oriented Accountant to join our finance team. As an Accountant, you will play a vital role in maintaining accurate financial records and supporting various accounting functions.",
-    summary:
-      "We are seeking a highly motivated and detail-oriented Accountant to join our finance team. As an Accountant, you will play a vital role in maintaining accurate financial records and supporting various accounting functions. The ideal candidate is a quick learner, possesses excellent analytical skills, and has a strong passion for numbers and finance.",
-    about:
-      "Our company is the pioneer provider of ride-hailing mobile solutions that connects smartphone owners in need of a ride to drivers who use their private cars offering transportation services. We are ambitious, passionate, engaged, and excited about pushing the boundaries of the transportation industry to new frontiers and be the first choice of each user.",
+    id: '1',
+    title: 'Frontend Developer',
+    category: 'Tech',
+    location: 'Remote',
+    description: 'We are looking for a talented Frontend Developer to join our growing team.',
+    summary: 'Join our engineering team to build amazing user interfaces using React, TypeScript, and modern frontend technologies.',
+    about: 'TechRide is a fast-growing tech company focused on building intuitive and innovative software solutions. Our engineering team is passionate about clean code and user-centric design.',
     responsibilities: [
-      "Record daily accounting entries and perform daily accounting routine functions.",
-      "Reconcile accounts payable and receivable.",
-      "Account reconciliation between group companies and contractors.",
-      "Conduct regular audits of financial data to identify discrepancies and errors.",
-      "Assist with month-end closing, general ledger entries, account, and variance analysis, monthly reporting of variances, calculate and record various accruals.",
-      "Maintain and establish policies and procedures related to financial affairs.",
+      'Develop and maintain client-side applications using React and TypeScript',
+      'Collaborate with backend developers to integrate RESTful APIs',
+      'Optimize applications for maximum speed and scalability',
+      'Build reusable code and libraries for future use',
+      'Implement responsive design for web applications'
     ],
     requirements: [
-      "Minimum Bachelor's degree in Accounting/Economics/Finance or any related field.",
-      "At least two years of relevant work experience.",
-      "Familiarity with ERP (preferably Microsoft System).",
-      "Familiarity with Moadian.",
-      "Good knowledge of tax rules.",
-      "Good time management skills.",
-      "Good knowledge of Microsoft Excel.",
-      "Good problem-solving and analytical skills.",
-      "Results-oriented.",
-      "English knowledge is an advantage.",
+      'Strong proficiency in JavaScript and TypeScript',
+      'Experience with React and modern frontend frameworks',
+      'Knowledge of modern frontend build pipelines and tools',
+      'Familiarity with RESTful APIs and asynchronous request handling',
+      'Understanding of cross-browser compatibility issues'
     ],
-    postedDate: "2023-08-01",
+    postedDate: '2023-04-15',
     isActive: true,
+    createdBy: '1' // Admin user ID
   },
   {
-    id: "2",
-    title: "Software Engineer (Golang)",
-    category: "Tech",
-    location: "Tehran, Tehran, Iran, Islamic Republic of",
-    description:
-      "We are looking for a skilled Golang developer to join our engineering team.",
-    summary:
-      "Join our team of talented engineers to build scalable services and help us drive innovation in the transportation industry. As a Golang developer, you will work on critical backend systems that power our platform.",
-    about:
-      "Our company is the pioneer provider of ride-hailing mobile solutions that connects smartphone owners in need of a ride to drivers who use their private cars offering transportation services. We are ambitious, passionate, engaged, and excited about pushing the boundaries of the transportation industry to new frontiers and be the first choice of each user.",
+    id: '2',
+    title: 'Backend Engineer',
+    category: 'Tech',
+    location: 'New York',
+    description: 'Looking for a skilled Backend Engineer to develop and optimize our server-side applications.',
+    summary: 'Join our backend team to design and implement scalable APIs and services that power our platform.',
+    about: 'TechRide builds enterprise-grade software solutions for businesses worldwide. Our engineering organization values collaboration, innovation, and continuous learning.',
     responsibilities: [
-      "Design and develop high-performance, reliable, and maintainable services in Go",
-      "Work collaboratively in cross-functional teams",
-      "Optimize application performance and scalability",
-      "Implement effective testing strategies",
-      "Contribute to architectural decisions and best practices",
-      "Mentor junior developers and participate in code reviews",
+      'Design and implement robust, scalable, and secure server-side applications',
+      'Create and maintain database schemas and models',
+      'Integrate with third-party services and APIs',
+      'Optimize backend performance for speed and reliability',
+      'Collaborate with frontend developers to integrate APIs'
     ],
     requirements: [
-      "Bachelor's degree in Computer Science or related field",
-      "Minimum 3 years of software development experience",
-      "Proficiency in Golang with a strong understanding of its features and best practices",
-      "Experience with RESTful APIs and microservices architecture",
-      "Familiarity with SQL and NoSQL databases",
-      "Strong knowledge of data structures, algorithms, and distributed systems",
-      "Experience with Docker containers and Kubernetes is a plus",
-      "Good communication skills and ability to work in a team",
+      'Strong experience with Node.js, Python, or Java',
+      'Knowledge of database systems (SQL and NoSQL)',
+      'Understanding of server-side templating languages',
+      'Familiarity with microservices architecture',
+      'Experience with cloud platforms (AWS, Azure, or GCP)'
     ],
-    postedDate: "2023-07-15",
+    postedDate: '2023-04-10',
     isActive: true,
+    createdBy: '1'
   },
   {
-    id: "3",
-    title: "Junior User Researcher",
-    category: "Product",
-    location: "Tehran, Tehran, Iran, Islamic Republic of",
-    description:
-      "We are seeking a passionate Junior User Researcher to help us understand user needs and behaviors.",
-    summary:
-      "Join our product team and help us discover user insights that will shape our product development. You will be responsible for planning and conducting user research to improve our customer experience.",
-    about:
-      "Our company is the pioneer provider of ride-hailing mobile solutions that connects smartphone owners in need of a ride to drivers who use their private cars offering transportation services. We are ambitious, passionate, engaged, and excited about pushing the boundaries of the transportation industry to new frontiers and be the first choice of each user.",
+    id: '3',
+    title: 'Product Manager',
+    category: 'Product',
+    location: 'San Francisco',
+    description: 'We are seeking an experienced Product Manager to lead our product development initiatives.',
+    summary: 'Join our product team to drive feature development, create roadmaps, and ensure we deliver value to our users.',
+    about: 'TechRide is a customer-focused company that builds products with real-world impact. We value data-driven decision making, user-centered design, and agile methodologies.',
     responsibilities: [
-      "Conduct user interviews, surveys, and usability testing",
-      "Analyze research data and identify patterns and insights",
-      "Create user personas and journey maps",
-      "Present research findings to product teams",
-      "Collaborate with designers and product managers",
-      "Stay updated on UX research methods and tools",
+      'Define product vision, strategy, and roadmap',
+      'Gather and prioritize requirements based on user needs and business objectives',
+      'Collaborate with engineering, design, and marketing teams',
+      'Monitor product performance and make data-driven decisions',
+      'Stay up-to-date with market trends and competition'
     ],
     requirements: [
-      "Bachelor's degree in Psychology, Human-Computer Interaction, or related field",
-      "0-2 years of experience in user research or related role",
-      "Knowledge of user research methodologies",
-      "Strong analytical and problem-solving skills",
-      "Excellent communication and presentation skills",
-      "Empathy for users and passion for improving user experiences",
-      "Basic understanding of design principles is a plus",
+      'Proven experience as a Product Manager',
+      'Strong analytical and problem-solving skills',
+      'Excellent communication and presentation abilities',
+      'Technical background or knowledge of software development',
+      'Experience with agile methodologies'
     ],
-    postedDate: "2023-08-10",
+    postedDate: '2023-03-28',
     isActive: true,
-  },
-  {
-    id: "4",
-    title: "Support Engineer",
-    category: "Tech",
-    location: "Tehran, Tehran, Iran, Islamic Republic of",
-    description:
-      "We are looking for a Support Engineer to provide technical assistance to our customers.",
-    summary:
-      "As a Support Engineer, you will be the first point of contact for technical issues and play a crucial role in ensuring customer satisfaction. You will troubleshoot problems, document solutions, and escalate complex issues to the appropriate teams.",
-    about:
-      "Our company is the pioneer provider of ride-hailing mobile solutions that connects smartphone owners in need of a ride to drivers who use their private cars offering transportation services. We are ambitious, passionate, engaged, and excited about pushing the boundaries of the transportation industry to new frontiers and be the first choice of each user.",
-    responsibilities: [
-      "Respond to customer inquiries and provide technical support",
-      "Troubleshoot and resolve technical issues",
-      "Document solutions and maintain knowledge base",
-      "Escalate complex issues to specialized teams",
-      "Identify recurring problems and suggest improvements",
-      "Participate in on-call rotations for critical issues",
-    ],
-    requirements: [
-      "Bachelor's degree in Computer Science or related field",
-      "1-3 years of experience in a technical support role",
-      "Strong troubleshooting and problem-solving skills",
-      "Knowledge of Linux systems and networking concepts",
-      "Excellent communication skills",
-      "Ability to work under pressure and handle multiple tasks",
-      "Customer-oriented mindset",
-      "Fluency in English is required",
-    ],
-    postedDate: "2023-07-20",
-    isActive: true,
-  },
+    createdBy: '1'
+  }
 ];
 
-export const mockApplicants: Applicant[] = [
+const mockApplications: Application[] = [
   {
-    id: "1",
-    jobId: "1",
-    fullName: "Ali Mohammadi",
-    email: "ali.mohammadi@example.com",
-    phoneNumber: "+98 912 345 6789",
-    resumeUrl: "/resumes/ali-mohammadi-resume.pdf",
-    coverLetter:
-      "I am excited to apply for the General Accountant position as I believe my skills and experience make me a perfect fit for this role.",
-    status: "screening",
-    appliedDate: "2023-08-05",
-    skills: [
-      "Accounting",
-      "Microsoft Excel",
-      "Financial Analysis",
-      "ERP Systems",
-    ],
+    id: '1',
+    jobId: '1',
+    userId: '2', // Regular user
+    fullName: 'John Doe',
+    email: 'john.doe@example.com',
+    phoneNumber: '+1 (555) 123-4567',
+    resumeUrl: '/uploads/resumes/john_doe_resume.pdf',
+    coverLetter: 'I am excited to apply for the Frontend Developer position as I believe my skills and experience make me a perfect fit for this role.',
+    status: 'reviewed',
+    appliedDate: '2023-04-16',
+    skills: ['React', 'TypeScript', 'JavaScript', 'CSS', 'HTML'],
     experience: 3,
-    matchScore: 85,
+    matchScore: 85
   },
   {
-    id: "2",
-    jobId: "1",
-    fullName: "Sara Ahmadi",
-    email: "sara.ahmadi@example.com",
-    phoneNumber: "+98 912 987 6543",
-    resumeUrl: "/resumes/sara-ahmadi-resume.pdf",
-    status: "pending",
-    appliedDate: "2023-08-07",
-    skills: [
-      "Financial Reporting",
-      "Tax Accounting",
-      "QuickBooks",
-      "Data Analysis",
-    ],
+    id: '2',
+    jobId: '1',
+    userId: '3', // Another user
+    fullName: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    phoneNumber: '+1 (555) 987-6543',
+    resumeUrl: '/uploads/resumes/jane_smith_resume.pdf',
+    status: 'pending',
+    appliedDate: '2023-04-17',
+    skills: ['React', 'JavaScript', 'Tailwind CSS', 'Redux'],
     experience: 2,
-    matchScore: 72,
+    matchScore: 76
   },
   {
-    id: "3",
-    jobId: "2",
-    fullName: "Mohammad Rezaei",
-    email: "mohammad.rezaei@example.com",
-    phoneNumber: "+98 935 123 4567",
-    resumeUrl: "/resumes/mohammad-rezaei-resume.pdf",
-    coverLetter:
-      "I am a passionate Golang developer with 4 years of experience in building scalable microservices and APIs.",
-    status: "interview",
-    appliedDate: "2023-07-20",
-    skills: ["Golang", "Microservices", "Docker", "Kubernetes", "PostgreSQL"],
-    experience: 4,
-    matchScore: 92,
-  },
-  {
-    id: "4",
-    jobId: "2",
-    fullName: "Zahra Karimi",
-    email: "zahra.karimi@example.com",
-    phoneNumber: "+98 912 345 9876",
-    resumeUrl: "/resumes/zahra-karimi-resume.pdf",
-    status: "technical",
-    appliedDate: "2023-07-18",
-    skills: ["Golang", "RESTful APIs", "MongoDB", "Redis", "Git"],
+    id: '3',
+    jobId: '2',
+    userId: '4', // Another user
+    fullName: 'Michael Johnson',
+    email: 'michael.johnson@example.com',
+    phoneNumber: '+1 (555) 456-7890',
+    resumeUrl: '/uploads/resumes/michael_johnson_resume.pdf',
+    coverLetter: 'I am a passionate backend developer with 5 years of experience building scalable systems.',
+    status: 'shortlisted',
+    appliedDate: '2023-04-12',
+    skills: ['Node.js', 'Express', 'MongoDB', 'AWS', 'Docker'],
     experience: 5,
-    matchScore: 88,
-  },
+    matchScore: 92
+  }
 ];
-
-export const mockCompany: Company = {
-  name: "TechRide",
-  description:
-    "TechRide is the fastest-growing startup in Iran and is powered by a young team that wants to take Iran's IT industry to the next level. We are always looking for young talent that wants to make a better tomorrow and have a positive impact on the lifestyle of people. Today we are proud to announce that TechRide is the first and biggest ride-hailing service in Iran with more than 30 million passengers and 2 million drivers in its fleet. We are always expanding the team to reach our ambitious objectives!",
+const mockCompany: Company = {
+  name: 'TechRide',
+  description: 'TechRide is the fastest-growing startup in the region and is powered by a young team that wants to take the IT industry to the next level. We are always looking for young talent that wants to make a better tomorrow and have a positive impact on the lifestyle of people.',
   location: {
-    address: "Tehran, Tehran, Iran, Islamic Republic of",
+    address: 'Tehran, Tehran, Iran, Islamic Republic of',
     coordinates: {
       lat: 35.7219,
-      lng: 51.3347,
-    },
+      lng: 51.3347
+    }
   },
   benefits: [
     {
-      id: "1",
-      title: "Hybrid Working",
-      icon: "office-building",
+      id: '1',
+      title: 'Hybrid Working',
+      icon: 'office-building'
     },
     {
-      id: "2",
-      title: "Competitive Salary",
-      icon: "currency-dollar",
+      id: '2',
+      title: 'Competitive Salary',
+      icon: 'currency-dollar'
     },
     {
-      id: "3",
-      title: "Employee Loan",
-      icon: "cash",
+      id: '3',
+      title: 'Employee Loan',
+      icon: 'cash'
     },
     {
-      id: "4",
-      title: "Time Flexibility",
-      icon: "clock",
+      id: '4',
+      title: 'Time Flexibility',
+      icon: 'clock'
     },
     {
-      id: "5",
-      title: "In-House Training Courses",
-      icon: "academic-cap",
+      id: '5',
+      title: 'In-House Training',
+      icon: 'academic-cap'
     },
     {
-      id: "6",
-      title: "Supplementary Health Insurance",
-      icon: "heart",
+      id: '6',
+      title: 'Health Insurance',
+      icon: 'heart'
     },
     {
-      id: "7",
-      title: "Online/On-site Doctor",
-      icon: "user-md",
+      id: '7',
+      title: 'Online Doctor',
+      icon: 'user-md'
     },
     {
-      id: "8",
-      title: "TechRide Credit",
-      icon: "credit-card",
+      id: '8',
+      title: 'Company Credit',
+      icon: 'credit-card'
     },
     {
-      id: "9",
-      title: "Internet Allowance",
-      icon: "wifi",
-    },
+      id: '9',
+      title: 'Internet Allowance',
+      icon: 'wifi'
+    }
   ],
   photos: [
-    "/images/office-1.jpg",
-    "/images/office-2.jpg",
-    "/images/office-3.jpg",
-    "/images/office-4.jpg",
-  ],
+    '/images/office-1.jpg',
+    '/images/office-2.jpg',
+    '/images/office-3.jpg',
+    '/images/office-4.jpg'
+  ]
 };
 
-export const mockCategoriesCount: Record<JobCategory, number> = {
-  All: mockJobs.length,
-  Finance: mockJobs.filter((job) => job.category === "Finance").length,
-  Tech: mockJobs.filter((job) => job.category === "Tech").length,
-  Product: mockJobs.filter((job) => job.category === "Product").length,
-  Commercial: mockJobs.filter((job) => job.category === "Commercial").length,
-  "Business Development": mockJobs.filter(
-    (job) => job.category === "Business Development"
-  ).length,
-  Marketing: mockJobs.filter((job) => job.category === "Marketing").length,
-  Operations: mockJobs.filter((job) => job.category === "Operations").length,
+export const getCategoriesWithCount = (): Promise<Record<JobCategory, number>> => {
+  const categories: Record<JobCategory, number> = {
+    'All': 0,
+    'Finance': 0,
+    'Tech': 0,
+    'Product': 0,
+    'Commercial': 0,
+    'Business Development': 0,
+    'Marketing': 0,
+    'Operations': 0,
+  };
+  
+  mockJobs.forEach(job => {
+    categories['All']++;
+    categories[job.category]++;
+  });
+  
+  return Promise.resolve(categories);
 };
 
-export const getJobs = (category?: JobCategory) => {
-  if (!category || category === "All") {
-    return Promise.resolve(mockJobs);
-  }
-  return Promise.resolve(mockJobs.filter((job) => job.category === category));
-};
-
-export const getJob = (id: string) => {
-  const job = mockJobs.find((job) => job.id === id);
-  if (!job) {
-    return Promise.reject(new Error("Job not found"));
-  }
-  return Promise.resolve(job);
-};
-
-export const getApplicants = (jobId?: string) => {
-  if (!jobId) {
-    return Promise.resolve(mockApplicants);
-  }
-  return Promise.resolve(
-    mockApplicants.filter((applicant) => applicant.jobId === jobId)
-  );
-};
-
-export const getApplicant = (id: string) => {
-  const applicant = mockApplicants.find((applicant) => applicant.id === id);
-  if (!applicant) {
-    return Promise.reject(new Error("Applicant not found"));
-  }
-  return Promise.resolve(applicant);
-};
-
-export const getCompanyInfo = () => {
+export const getCompanyInfo = (): Promise<Company> => {
   return Promise.resolve(mockCompany);
 };
 
-export const getCategoriesWithCount = () => {
-  return Promise.resolve(mockCategoriesCount);
+export const getJobById = (id: string): Promise<Job | undefined> => {
+  const job = mockJobs.find(job => job.id === id);
+  return Promise.resolve(job);
+};
+export const getJobs = (category?: JobCategory): Promise<Job[]> => {
+  if (!category || category === 'All') {
+    return Promise.resolve([...mockJobs]);
+  }
+  return Promise.resolve(mockJobs.filter(job => job.category === category));
+};
+
+export const createJob = (job: Omit<Job, 'id'>): Promise<Job> => {
+  const newJob: Job = {
+    ...job,
+    id: Math.random().toString(36).substring(2, 9) // Generate a random ID
+  };
+  mockJobs.push(newJob);
+  return Promise.resolve(newJob);
+};
+
+export const updateJob = (id: string, updates: Partial<Job>): Promise<Job | undefined> => {
+  const index = mockJobs.findIndex(job => job.id === id);
+  if (index === -1) {
+    return Promise.resolve(undefined);
+  }
+  
+  mockJobs[index] = { ...mockJobs[index], ...updates };
+  return Promise.resolve(mockJobs[index]);
+};
+
+export const deleteJob = (id: string): Promise<boolean> => {
+  const index = mockJobs.findIndex(job => job.id === id);
+  if (index === -1) {
+    return Promise.resolve(false);
+  }
+  
+  mockJobs.splice(index, 1);
+  return Promise.resolve(true);
+};
+
+export const getApplications = (): Promise<Application[]> => {
+  return Promise.resolve([...mockApplications]);
+};
+
+export const getApplicationsByJobId = (jobId: string): Promise<Application[]> => {
+  const applications = mockApplications.filter(app => app.jobId === jobId);
+  return Promise.resolve(applications);
+};
+
+export const getApplicationsByUserId = (userId: string): Promise<Application[]> => {
+  const applications = mockApplications.filter(app => app.userId === userId);
+  return Promise.resolve(applications);
+};
+
+export const getApplicationById = (id: string): Promise<Application | undefined> => {
+  const application = mockApplications.find(app => app.id === id);
+  return Promise.resolve(application);
+};
+
+export const createApplication = (application: Omit<Application, 'id'>): Promise<Application> => {
+  const newApplication: Application = {
+    ...application,
+    id: Math.random().toString(36).substring(2, 9) // Generate a random ID
+  };
+  mockApplications.push(newApplication);
+  return Promise.resolve(newApplication);
+};
+
+export const updateApplication = (id: string, updates: Partial<Application>): Promise<Application | undefined> => {
+  const index = mockApplications.findIndex(app => app.id === id);
+  if (index === -1) {
+    return Promise.resolve(undefined);
+  }
+  
+  mockApplications[index] = { ...mockApplications[index], ...updates };
+  return Promise.resolve(mockApplications[index]);
+};
+
+export const analyzeResume = (applicationId: string): Promise<number> => {
+  const score = Math.floor(Math.random() * 41) + 60;
+  
+  const index = mockApplications.findIndex(app => app.id === applicationId);
+  if (index !== -1) {
+    mockApplications[index].matchScore = score;
+  }
+  
+  return new Promise(resolve => {
+    setTimeout(() => resolve(score), 1500);
+  });
 };
