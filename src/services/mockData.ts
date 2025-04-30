@@ -26,7 +26,7 @@ const mockJobs: Job[] = [
       'Familiarity with RESTful APIs and asynchronous request handling',
       'Understanding of cross-browser compatibility issues'
     ],
-    postedDate: '2023-04-15',
+    postedDate: '2025-04-15',
     isActive: true,
     createdBy: '1' // Admin user ID
   },
@@ -52,7 +52,7 @@ const mockJobs: Job[] = [
       'Familiarity with microservices architecture',
       'Experience with cloud platforms (AWS, Azure, or GCP)'
     ],
-    postedDate: '2023-04-10',
+    postedDate: '2025-04-10',
     isActive: true,
     createdBy: '1'
   },
@@ -78,7 +78,7 @@ const mockJobs: Job[] = [
       'Technical background or knowledge of software development',
       'Experience with agile methodologies'
     ],
-    postedDate: '2023-03-28',
+    postedDate: '2025-03-28',
     isActive: true,
     createdBy: '1'
   }
@@ -95,7 +95,7 @@ const mockApplications: Application[] = [
     resumeUrl: '/uploads/resumes/john_doe_resume.pdf',
     coverLetter: 'I am excited to apply for the Frontend Developer position as I believe my skills and experience make me a perfect fit for this role.',
     status: 'reviewed',
-    appliedDate: '2023-04-16',
+    appliedDate: '2025-04-16',
     skills: ['React', 'TypeScript', 'JavaScript', 'CSS', 'HTML'],
     experience: 3,
     matchScore: 85
@@ -109,7 +109,7 @@ const mockApplications: Application[] = [
     phoneNumber: '+1 (555) 987-6543',
     resumeUrl: '/uploads/resumes/jane_smith_resume.pdf',
     status: 'pending',
-    appliedDate: '2023-04-17',
+    appliedDate: '2025-04-17',
     skills: ['React', 'JavaScript', 'Tailwind CSS', 'Redux'],
     experience: 2,
     matchScore: 76
@@ -124,7 +124,7 @@ const mockApplications: Application[] = [
     resumeUrl: '/uploads/resumes/michael_johnson_resume.pdf',
     coverLetter: 'I am a passionate backend developer with 5 years of experience building scalable systems.',
     status: 'shortlisted',
-    appliedDate: '2023-04-12',
+    appliedDate: '2025-04-12',
     skills: ['Node.js', 'Express', 'MongoDB', 'AWS', 'Docker'],
     experience: 5,
     matchScore: 92

@@ -66,7 +66,7 @@ export function Footer() {
         
         <div className="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            &copy; 2023 TechRide. All rights reserved.
+            &copy; 2025 TechRide. All rights reserved.
           </p>
         </div>
       </div>

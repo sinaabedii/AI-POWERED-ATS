@@ -37,7 +37,7 @@ export function ApplicantsManagement() {
                   <span className="text-gray-500 dark:text-gray-400">
                     Applied:
                   </span>
-                  <span>2023-04-15</span>
+                  <span>2025-04-15</span>
                 </p>
               </div>
               <div className="mt-3 flex justify-end space-x-2">
@@ -68,7 +68,7 @@ export function ApplicantsManagement() {
                   <span className="text-gray-500 dark:text-gray-400">
                     Applied:
                   </span>
-                  <span>2023-04-10</span>
+                  <span>2025-04-10</span>
                 </p>
               </div>
               <div className="mt-3 flex justify-end space-x-2">
@@ -112,7 +112,7 @@ export function ApplicantsManagement() {
                     Software Engineer
                   </td>
                   <td className="px-3 py-2 sm:px-4 text-xs sm:text-sm">
-                    2023-04-15
+                  2025-04-15
                   </td>
                   <td className="px-3 py-2 sm:px-4 text-xs sm:text-sm">
                     <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full dark:bg-blue-900 dark:text-blue-100">
@@ -136,7 +136,7 @@ export function ApplicantsManagement() {
                     Product Manager
                   </td>
                   <td className="px-3 py-2 sm:px-4 text-xs sm:text-sm">
-                    2023-04-10
+                  2025-04-10
                   </td>
                   <td className="px-3 py-2 sm:px-4 text-xs sm:text-sm">
                     <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full dark:bg-purple-900 dark:text-purple-100">
