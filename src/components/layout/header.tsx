@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  XMarkIcon,
+  UserCircleIcon,
+  SparklesIcon,
+  BellIcon,
+} from '@heroicons/react/24/outline';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth-store';
@@ -23,7 +29,7 @@ export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -39,81 +45,101 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 bg-white/95 shadow-sm backdrop-blur transition-all dark:bg-gray-800/90',
-        isScrolled ? 'py-3' : 'py-4'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+        isScrolled
+          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-lg shadow-slate-200/20 dark:shadow-slate-900/50 py-3'
+          : 'bg-transparent py-5'
       )}
     >
       <div className="container-custom mx-auto">
-        <div className="flex h-12 items-center justify-between md:h-14">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
-              <span className="text-2xl font-bold text-primary-500">ATS System</span>
-            </Link>
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-600 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
+              <div className="relative bg-gradient-to-r from-violet-600 to-purple-600 p-2 rounded-xl">
+                <SparklesIcon className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+              TalentAI
+            </span>
+          </Link>
 
-            <nav className="hidden md:flex md:gap-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    isActive(item.href)
-                      ? 'bg-primary-100 text-primary-700 dark:bg-gray-700/50 dark:text-primary-400'
-                      : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
-                  )}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-          </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300',
+                  isActive(item.href)
+                    ? 'text-violet-600 dark:text-violet-400'
+                    : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
+                )}
+              >
+                {item.name}
+                {isActive(item.href) && (
+                  <span className="absolute inset-x-2 -bottom-px h-0.5 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full" />
+                )}
+              </Link>
+            ))}
+          </nav>
 
-          <div className="flex items-center gap-4">
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-3">
             <ThemeToggle />
 
-            <div className="hidden items-center gap-2 sm:flex">
-              {isAuthenticated ? (
-                <div className="relative">
+            {isAuthenticated ? (
+              <>
+                {/* Notifications */}
+                <button className="relative p-2 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+                  <BellIcon className="h-5 w-5" />
+                  <span className="absolute top-1 right-1 h-2 w-2 bg-rose-500 rounded-full ring-2 ring-white dark:ring-slate-900" />
+                </button>
+
+                {/* Profile Menu */}
+                <div className="relative hidden sm:block">
                   <button
-                    type="button"
-                    className="flex rounded-full transition-opacity hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                    className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                   >
-                    <span className="sr-only">Open user menu</span>
-                    <UserCircleIcon className="h-8 w-8 text-gray-400 dark:text-gray-300" />
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-sm font-semibold">
+                      {user?.first_name?.charAt(0) || 'U'}
+                    </div>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-200 hidden lg:block">
+                      {user?.full_name}
+                    </span>
                   </button>
 
                   {isProfileMenuOpen && (
                     <div
-                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-gray-900/5 focus:outline-none dark:bg-gray-700 dark:ring-white/10"
+                      className="absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 border border-slate-200 dark:border-slate-700 overflow-hidden animate-scale-in origin-top-right"
                       onMouseLeave={() => setIsProfileMenuOpen(false)}
                     >
-                      <div className="p-4">
-                        <p className="truncate text-sm font-medium text-gray-700 dark:text-gray-200">
-                          {user?.name}
-                        </p>
-                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                          {user?.email}
-                        </p>
+                      <div className="p-4 border-b border-slate-100 dark:border-slate-700">
+                        <p className="font-semibold text-slate-900 dark:text-white">{user?.full_name}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">{user?.email}</p>
                       </div>
-                      <div className="border-t border-gray-100 dark:border-gray-600/30">
+                      <div className="p-2">
                         <Link
                           href="/dashboard"
-                          className="block px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-600/30"
+                          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                           onClick={() => setIsProfileMenuOpen(false)}
                         >
                           Dashboard
                         </Link>
                         <Link
                           href="/dashboard/settings"
-                          className="block px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-600/30"
+                          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                           onClick={() => setIsProfileMenuOpen(false)}
                         >
                           Settings
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="block w-full px-4 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-600/30"
+                          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
                         >
                           Sign out
                         </button>
@@ -121,24 +147,25 @@ export function Header() {
                     </div>
                   )}
                 </div>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button variant="ghost" size="sm">Sign in</Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button size="sm">Sign up</Button>
-                  </Link>
-                </>
-              )}
-            </div>
+              </>
+            ) : (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    Sign in
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm">Get Started</Button>
+                </Link>
+              </div>
+            )}
 
+            {/* Mobile Menu Button */}
             <button
-              type="button"
-              className="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-gray-300 dark:hover:bg-gray-700 sm:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors"
             >
-              <span className="sr-only">{isMenuOpen ? 'Close menu' : 'Open menu'}</span>
               {isMenuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
             </button>
           </div>
@@ -147,62 +174,54 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="absolute inset-x-0 top-full z-50 border-t border-gray-100 bg-white/95 backdrop-blur-lg transition-all dark:border-gray-700/30 dark:bg-gray-800/95 sm:hidden">
-          <div className="container-custom mx-auto py-4">
-            <nav className="grid gap-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'rounded-lg px-4 py-2.5 text-sm font-medium',
-                    isActive(item.href)
-                      ? 'bg-primary-100 text-primary-700 dark:bg-gray-700/50'
-                      : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50'
-                  )}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-
-              <div className="mt-4 border-t border-gray-100 pt-4 dark:border-gray-700/30">
-                {isAuthenticated ? (
-                  <>
-                    <Link
-                      href="/dashboard"
-                      className="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full rounded-lg px-4 py-2.5 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50"
-                    >
-                      Sign out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      className="block rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-700"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Sign in
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="mt-2 block rounded-lg border-2 border-primary-600 px-4 py-2.5 text-sm font-medium text-primary-600 hover:bg-primary-50 dark:border-primary-500 dark:text-primary-500 dark:hover:bg-gray-700/50"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Sign up
-                    </Link>
-                  </>
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 animate-slide-up">
+          <div className="container-custom py-4 space-y-2">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={cn(
+                  'block px-4 py-3 rounded-xl text-sm font-medium transition-colors',
+                  isActive(item.href)
+                    ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300'
+                    : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
                 )}
-              </div>
-            </nav>
+              >
+                {item.name}
+              </Link>
+            ))}
+
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-2">
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="outline" className="w-full">
+                      Sign in
+                    </Button>
+                  </Link>
+                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full">Get Started</Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
