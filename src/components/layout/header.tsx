@@ -1,13 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import {
   Bars3Icon,
   XMarkIcon,
-  UserCircleIcon,
-  SparklesIcon,
   BellIcon,
 } from '@heroicons/react/24/outline';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -54,15 +53,19 @@ export function Header() {
       <div className="container-custom mx-auto">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-600 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-              <div className="relative bg-gradient-to-r from-violet-600 to-purple-600 p-2 rounded-xl">
-                <SparklesIcon className="h-6 w-6 text-white" />
-              </div>
+              <Image 
+                src="/images/logo/logo.png" 
+                alt="AryanTalent Logo" 
+                width={72}
+                height={72}
+                className="relative rounded-xl object-contain"
+              />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
-              TalentAI
+            <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+              AryanTalent
             </span>
           </Link>
 

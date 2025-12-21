@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SparklesIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 const footerLinks = {
   product: [
@@ -69,15 +69,18 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
           {/* Brand */}
           <div className="col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-2 rounded-xl">
-                <SparklesIcon className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-xl font-bold text-white">TalentAI</span>
+            <Link href="/" className="flex items-center gap-3 mb-4">
+              <Image 
+                src="/images/logo/logo.png" 
+                alt="AryanTalent Logo" 
+                width={64}
+                height={64}
+                className="rounded-xl object-contain"
+              />
+              <span className="text-2xl font-bold text-white">AryanTalent</span>
             </Link>
             <p className="text-slate-400 text-sm mb-6 max-w-xs">
-              AI-powered recruitment platform that helps companies find the perfect candidates faster
-              and smarter.
+              AI-powered recruitment platform by Aryan Saeed Holding that helps companies find the perfect candidates faster and smarter.
             </p>
             <div className="flex gap-4">
               {socialLinks.map((item) => (
@@ -164,7 +167,7 @@ export function Footer() {
       <div className="border-t border-slate-800">
         <div className="container-custom py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-500">
-            © {new Date().getFullYear()} TalentAI. All rights reserved.
+            © {new Date().getFullYear()} AryanTalent by Aryan Saeed Holding. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <span className="flex items-center gap-1">

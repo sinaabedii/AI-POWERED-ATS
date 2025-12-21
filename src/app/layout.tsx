@@ -3,8 +3,8 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ATS System - AI Powered Applicant Tracking',
-  description: 'Modern AI-powered applicant tracking system for efficient hiring',
+  title: 'AryanTalent - AI Powered Applicant Tracking System',
+  description: 'AryanTalent ATS - Modern AI-powered applicant tracking system for efficient hiring',
 };
 
 export default function RootLayout({

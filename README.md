@@ -1,6 +1,6 @@
-# TalentAI ATS Frontend
+# AryanTalent ATS Frontend
 
-Modern Applicant Tracking System frontend built with Next.js 14, TypeScript, and Tailwind CSS.
+Modern Applicant Tracking System frontend built with Next.js 14, TypeScript, and Tailwind CSS for Aryan Saeed Holding.
 
 ## Features
 

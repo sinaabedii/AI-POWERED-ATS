@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth-store';
 import {
-  SparklesIcon,
   PhoneIcon,
   LockClosedIcon,
   UserIcon,
@@ -96,11 +96,15 @@ export default function RegisterPage() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-              <SparklesIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-slate-900 dark:text-white">TalentAI</span>
+          <Link href="/" className="flex items-center gap-4 mb-8">
+            <Image 
+              src="/images/logo/logo.png" 
+              alt="AryanTalent Logo" 
+              width={72}
+              height={72}
+              className="rounded-xl object-contain"
+            />
+            <span className="text-3xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
           </Link>
 
           {/* Progress Steps */}

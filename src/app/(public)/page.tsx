@@ -116,7 +116,7 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4">Features</Badge>
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-              Why Choose TalentAI?
+              Why Choose AryanTalent?
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Our platform combines cutting-edge AI technology with a user-friendly interface.

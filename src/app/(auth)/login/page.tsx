@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth-store';
 import {
-  SparklesIcon,
   PhoneIcon,
   LockClosedIcon,
   EyeIcon,
@@ -71,11 +71,15 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-              <SparklesIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-slate-900 dark:text-white">TalentAI</span>
+          <Link href="/" className="flex items-center gap-4 mb-8">
+            <Image 
+              src="/images/logo/logo.png" 
+              alt="AryanTalent Logo" 
+              width={72}
+              height={72}
+              className="rounded-xl object-contain"
+            />
+            <span className="text-3xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
           </Link>
 
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
@@ -261,8 +265,14 @@ export default function LoginPage() {
         <div className="absolute bottom-1/4 -left-20 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl" />
         
         <div className="relative max-w-md text-white text-center">
-          <div className="w-20 h-20 mx-auto mb-8 rounded-2xl bg-white/20 backdrop-blur-xl flex items-center justify-center">
-            <SparklesIcon className="h-10 w-10" />
+          <div className="w-36 h-36 mx-auto mb-8 rounded-2xl bg-white/20 backdrop-blur-xl flex items-center justify-center p-4">
+            <Image 
+              src="/images/logo/logo.png" 
+              alt="AryanTalent Logo" 
+              width={112}
+              height={112}
+              className="object-contain"
+            />
           </div>
           <h2 className="text-3xl font-bold mb-4">AI-Powered Recruitment</h2>
           <p className="text-violet-100">

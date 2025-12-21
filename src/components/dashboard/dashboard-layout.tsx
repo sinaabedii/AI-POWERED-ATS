@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,6 @@ import {
   ChartBarIcon,
   Cog6ToothIcon,
   UserGroupIcon,
-  SparklesIcon,
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
@@ -72,11 +72,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-6 border-b border-slate-200 dark:border-slate-700">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-                <SparklesIcon className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-lg font-bold text-slate-900 dark:text-white">TalentAI</span>
+            <Link href="/" className="flex items-center gap-3">
+              <Image 
+                src="/images/logo/logo.png" 
+                alt="AryanTalent Logo" 
+                width={48}
+                height={48}
+                className="rounded-lg object-contain"
+              />
+              <span className="text-xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
