@@ -81,7 +81,7 @@ export default function AboutPage() {
         <div className="container-custom relative z-10 text-center">
           <Badge variant="gradient" className="mb-6">
             <SparklesIcon className="h-4 w-4 mr-2" />
-            About AryanTalent
+            About ArianTalent
           </Badge>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
             Transforming How
@@ -90,7 +90,7 @@ export default function AboutPage() {
             </span>
           </h1>
           <p className="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto">
-            AryanTalent is a leading AI-powered recruitment platform by Aryan Saeed Holding, helping companies find the best talent efficiently.
+            ArianTalent is a leading AI-powered recruitment platform by Aryan Saeed Holding, helping companies find the best talent efficiently.
           </p>
         </div>
       </section>
@@ -265,7 +265,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-violet-100">contact@aryantalent.com</p>
+                    <p className="text-violet-100">contact@ArianTalent.com</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">

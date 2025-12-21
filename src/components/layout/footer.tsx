@@ -72,12 +72,12 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-3 mb-4">
               <Image 
                 src="/images/logo/logo.png" 
-                alt="AryanTalent Logo" 
+                alt="ArianTalent Logo" 
                 width={64}
                 height={64}
                 className="rounded-xl object-contain"
               />
-              <span className="text-2xl font-bold text-white">AryanTalent</span>
+              <span className="text-2xl font-bold text-white">ArianTalent</span>
             </Link>
             <p className="text-slate-400 text-sm mb-6 max-w-xs">
               AI-powered recruitment platform by Aryan Saeed Holding that helps companies find the perfect candidates faster and smarter.
@@ -167,7 +167,7 @@ export function Footer() {
       <div className="border-t border-slate-800">
         <div className="container-custom py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-500">
-            © {new Date().getFullYear()} AryanTalent by Aryan Saeed Holding. All rights reserved.
+            © {new Date().getFullYear()} ArianTalent by Aryan Saeed Holding. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <span className="flex items-center gap-1">

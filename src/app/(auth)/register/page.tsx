@@ -99,12 +99,12 @@ export default function RegisterPage() {
           <Link href="/" className="flex items-center gap-4 mb-8">
             <Image 
               src="/images/logo/logo.png" 
-              alt="AryanTalent Logo" 
+              alt="ArianTalent Logo" 
               width={72}
               height={72}
               className="rounded-xl object-contain"
             />
-            <span className="text-3xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
+            <span className="text-3xl font-bold text-slate-900 dark:text-white">ArianTalent</span>
           </Link>
 
           {/* Progress Steps */}

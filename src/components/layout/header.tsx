@@ -58,14 +58,14 @@ export function Header() {
               <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-600 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
               <Image 
                 src="/images/logo/logo.png" 
-                alt="AryanTalent Logo" 
-                width={72}
-                height={72}
+                alt="ArianTalent Logo" 
+                width={42}
+                height={42}
                 className="relative rounded-xl object-contain"
               />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
-              AryanTalent
+              ArianTalent
             </span>
           </Link>
 

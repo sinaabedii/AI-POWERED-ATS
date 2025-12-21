@@ -74,12 +74,12 @@ export default function LoginPage() {
           <Link href="/" className="flex items-center gap-4 mb-8">
             <Image 
               src="/images/logo/logo.png" 
-              alt="AryanTalent Logo" 
+              alt="ArianTalent Logo" 
               width={72}
               height={72}
               className="rounded-xl object-contain"
             />
-            <span className="text-3xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
+            <span className="text-3xl font-bold text-slate-900 dark:text-white">ArianTalent</span>
           </Link>
 
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
@@ -268,7 +268,7 @@ export default function LoginPage() {
           <div className="w-36 h-36 mx-auto mb-8 rounded-2xl bg-white/20 backdrop-blur-xl flex items-center justify-center p-4">
             <Image 
               src="/images/logo/logo.png" 
-              alt="AryanTalent Logo" 
+              alt="ArianTalent Logo" 
               width={112}
               height={112}
               className="object-contain"

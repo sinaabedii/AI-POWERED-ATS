@@ -75,12 +75,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <Link href="/" className="flex items-center gap-3">
               <Image 
                 src="/images/logo/logo.png" 
-                alt="AryanTalent Logo" 
+                alt="ArianTalent Logo" 
                 width={48}
                 height={48}
                 className="rounded-lg object-contain"
               />
-              <span className="text-xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
+              <span className="text-xl font-bold text-slate-900 dark:text-white">ArianTalent</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

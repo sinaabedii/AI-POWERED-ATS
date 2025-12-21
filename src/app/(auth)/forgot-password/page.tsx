@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
             <SparklesIcon className="h-6 w-6 text-white" />
           </div>
-          <span className="text-xl font-bold text-slate-900 dark:text-white">AryanTalent</span>
+          <span className="text-xl font-bold text-slate-900 dark:text-white">ArianTalent</span>
         </Link>
 
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
