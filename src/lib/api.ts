@@ -527,6 +527,47 @@ class ApiService {
   async adminVerifyUser(id: number) {
     return this.post(`/auth/admin/users/${id}/verify/`);
   }
+
+  // Contact Form
+  async submitContactForm(data: {
+    name: string;
+    email: string;
+    phone?: string;
+    subject: string;
+    message: string;
+  }) {
+    return this.post<ContactFormResponse>('/contact/', data);
+  }
+
+  // Admin Contact Messages
+  async adminGetContactMessages(params?: Record<string, string>) {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return this.get<PaginatedResponse<ContactMessage>>(`/admin/messages/${query}`);
+  }
+
+  async adminGetContactMessage(id: number) {
+    return this.get<ContactMessage>(`/admin/messages/${id}/`);
+  }
+
+  async adminUpdateContactMessage(id: number, data: { status?: string; admin_notes?: string }) {
+    return this.patch<ContactMessage>(`/admin/messages/${id}/`, data);
+  }
+
+  async adminDeleteContactMessage(id: number) {
+    return this.delete(`/admin/messages/${id}/`);
+  }
+
+  async adminMarkContactReplied(id: number) {
+    return this.post(`/admin/messages/${id}/mark_replied/`);
+  }
+
+  async adminArchiveContact(id: number) {
+    return this.post(`/admin/messages/${id}/archive/`);
+  }
+
+  async adminGetContactStats() {
+    return this.get<ContactStats>('/admin/messages/stats/');
+  }
 }
 
 export class ApiError extends Error {
@@ -675,6 +716,45 @@ export interface DailyStats {
   interviews_scheduled: number;
   offers_made: number;
   hires: number;
+}
+
+export interface ContactFormResponse {
+  success: boolean;
+  message: string;
+  data: {
+    name: string;
+    email: string;
+    subject: string;
+  };
+}
+
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: string;
+  subject_display: string;
+  message: string;
+  status: 'new' | 'read' | 'replied' | 'archived';
+  status_display: string;
+  ip_address: string | null;
+  user_agent: string | null;
+  created_at: string;
+  updated_at: string;
+  replied_at: string | null;
+  admin_notes: string | null;
+}
+
+export interface ContactStats {
+  total: number;
+  by_status: {
+    new: number;
+    read: number;
+    replied: number;
+    archived: number;
+  };
+  by_subject: Record<string, number>;
 }
 
 export type { User, TokenResponse };
