@@ -1,6 +1,6 @@
-# ArianTalent ATS Frontend
+# AryanTalent Frontend
 
-Modern Applicant Tracking System frontend built with Next.js 14, TypeScript, and Tailwind CSS for Aryan Saeed Holding.
+سامانه جذب استعداد آرین‌تلنت - فرانت‌اند مدرن ساخته شده با Next.js 14، TypeScript و Tailwind CSS برای هلدینگ آرین سعید.
 
 ## Features
 
@@ -151,7 +151,7 @@ Make sure the Django backend is running on `http://localhost:8000` or update the
 
 ```bash
 # Backend setup
-cd ../ats-backend
+cd ../aryantalent-backend
 docker-compose up -d
 docker-compose exec api python manage.py migrate
 docker-compose exec api python manage.py seed_data

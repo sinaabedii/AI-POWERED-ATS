@@ -242,7 +242,7 @@ export const useAuthStore = create<AuthState>()(
       }),
     }),
     {
-      name: 'ats-auth-storage',
+      name: 'aryantalent-auth-storage',
       partialize: (state) => ({ 
         user: state.user, 
         isAuthenticated: state.isAuthenticated 

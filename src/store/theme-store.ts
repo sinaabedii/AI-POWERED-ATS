@@ -22,7 +22,7 @@ export const useThemeStore = create<ThemeState>()(
       setTheme: (theme: Theme) => set({ theme }),
     }),
     {
-      name: 'ats-theme-storage',
+      name: 'aryantalent-theme-storage',
     }
   )
 );

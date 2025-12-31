@@ -1,5 +1,5 @@
 /**
- * Type definitions for ATS Frontend
+ * Type definitions for AryanTalent Frontend
  * Aligned with backend API responses
  */
 

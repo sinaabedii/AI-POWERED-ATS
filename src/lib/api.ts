@@ -1,5 +1,5 @@
 /**
- * API Service for ATS Backend
+ * API Service for AryanTalent Backend
  * Handles all HTTP requests with JWT authentication
  */
 
