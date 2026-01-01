@@ -30,6 +30,7 @@ interface User {
   bio: string;
   location: string;
   linkedin_url: string;
+  resume_url: string | null;
   is_verified: boolean;
   is_active: boolean;
   created_at: string;
@@ -244,6 +245,32 @@ class ApiService {
     });
   }
 
+  // Resume Upload
+  async uploadResume(file: File): Promise<{ message: string; resume_url: string; filename: string; size: number }> {
+    const formData = new FormData();
+    formData.append('resume', file);
+    
+    const url = `${API_BASE_URL}/auth/profile/resume/`;
+    const headers: HeadersInit = {};
+    
+    if (this.accessToken) {
+      headers['Authorization'] = `Bearer ${this.accessToken}`;
+    }
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new ApiError(response.status, errorData);
+    }
+    
+    return response.json();
+  }
+
   // Jobs Endpoints
   async getJobs(params?: Record<string, string>) {
     const query = params ? '?' + new URLSearchParams(params).toString() : '';
@@ -285,6 +312,11 @@ class ApiService {
 
   async withdrawApplication(id: number) {
     return this.delete(`/applications/my/${id}/`);
+  }
+
+  // Application Analysis
+  async analyzeApplication(id: number) {
+    return this.post<{ match_score: number; analysis: ApplicationAnalysis }>(`/applications/manage/${id}/analyze/`);
   }
 
   // Analytics Endpoints
@@ -633,17 +665,26 @@ export interface Application {
   id: number;
   job: number | Job;
   job_title?: string;
+  job_slug?: string;
   job_company?: string;
   user?: User;
   applicant_name?: string;
   applicant_email?: string;
+  applicant_phone?: string;
   cover_letter: string;
   resume: string | null;
   portfolio_url: string;
   linkedin_url: string;
   status: 'pending' | 'reviewed' | 'shortlisted' | 'interview' | 'offered' | 'hired' | 'rejected' | 'withdrawn';
+  status_display?: string;
   match_score: number | null;
+  ai_analysis?: Record<string, unknown> | null;
+  internal_notes?: string;
   applied_date: string;
+  updated_at?: string;
+  reviewed_at?: string | null;
+  reviewed_by_name?: string;
+  can_withdraw?: boolean;
 }
 
 export interface SavedJob {
@@ -755,6 +796,16 @@ export interface ContactStats {
     archived: number;
   };
   by_subject: Record<string, number>;
+}
+
+export interface ApplicationAnalysis {
+  skill_match: number;
+  matched_skills: string[];
+  missing_skills: string[];
+  experience_score: number;
+  profile_completeness: number;
+  strengths: string[];
+  improvements: string[];
 }
 
 export type { User, TokenResponse };

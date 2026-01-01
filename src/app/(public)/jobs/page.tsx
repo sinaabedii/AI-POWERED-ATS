@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { JobCard } from '@/components/jobs/job-card';
 import { JobFilter } from '@/components/jobs/job-filter';
 import { useJobs, useCategories } from '@/hooks/useJobs';
@@ -9,8 +9,9 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 export default function JobsPage() {
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [searchTerm, setSearchTerm] = useState('');
-  const { jobs, isLoading, error, fetchJobs } = useJobs({ autoFetch: true });
+  const { jobs, isLoading, error, fetchJobs } = useJobs({ autoFetch: false });
   const { categories } = useCategories();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     const params: Record<string, string> = { ...filters };
@@ -18,7 +19,8 @@ export default function JobsPage() {
       params.search = searchTerm;
     }
     fetchJobs(params);
-  }, [filters, searchTerm, fetchJobs]);
+    isFirstRender.current = false;
+  }, [filters, searchTerm]);
 
   const handleFilterChange = (newFilters: Record<string, string>) => {
     setFilters(newFilters);

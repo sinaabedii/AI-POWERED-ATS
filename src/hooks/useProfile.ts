@@ -12,10 +12,13 @@ export function useUserSkills() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.getUserSkills();
+      const response = await api.getUserSkills();
+      // Handle both array and paginated response
+      const data = Array.isArray(response) ? response : (response as { results?: UserSkill[] }).results || [];
       setSkills(data);
     } catch {
       setError('Failed to load skills');
+      setSkills([]);
     } finally {
       setIsLoading(false);
     }
@@ -67,10 +70,13 @@ export function useUserExperiences() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.getUserExperiences();
+      const response = await api.getUserExperiences();
+      // Handle both array and paginated response
+      const data = Array.isArray(response) ? response : (response as { results?: UserExperience[] }).results || [];
       setExperiences(data);
     } catch {
       setError('Failed to load experiences');
+      setExperiences([]);
     } finally {
       setIsLoading(false);
     }

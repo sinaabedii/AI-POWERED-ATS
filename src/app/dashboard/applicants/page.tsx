@@ -4,15 +4,17 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useApplicationsManage } from '@/hooks/useApplications';
+import api, { Application } from '@/lib/api';
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
   EyeIcon,
-  ChatBubbleLeftRightIcon,
-  DocumentTextIcon,
+  CalendarDaysIcon,
+  DocumentArrowDownIcon,
   SparklesIcon,
   UserIcon,
   EnvelopeIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 
@@ -29,12 +31,32 @@ const statusOptions: { value: StatusFilter; label: string }[] = [
   { value: 'rejected', label: 'Rejected' },
 ];
 
+const interviewTypes = [
+  { value: 'phone', label: 'Phone Screen' },
+  { value: 'video', label: 'Video Call' },
+  { value: 'onsite', label: 'On-site' },
+  { value: 'technical', label: 'Technical' },
+  { value: 'final', label: 'Final Round' },
+];
+
 export default function ApplicantsManagementPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [sortBy, setSortBy] = useState<'date' | 'match' | 'name'>('date');
+  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
+  const [interviewForm, setInterviewForm] = useState({
+    interview_type: 'video',
+    scheduled_at: '',
+    duration_minutes: 60,
+    location: '',
+    meeting_link: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [analyzingId, setAnalyzingId] = useState<number | null>(null);
   
-  const { applications, isLoading, updateStatus } = useApplicationsManage();
+  const { applications, isLoading, updateStatus, fetchApplications } = useApplicationsManage();
 
   const filteredApplications = applications
     .filter(app => {
@@ -61,6 +83,77 @@ export default function ApplicantsManagementPage() {
     if (score >= 75) return 'text-violet-600';
     if (score >= 60) return 'text-amber-600';
     return 'text-rose-600';
+  };
+
+  // View application details
+  const handleViewApplication = async (application: Application) => {
+    try {
+      const detail = await api.getApplicationDetail(application.id);
+      setSelectedApplication(detail);
+      setShowDetailModal(true);
+    } catch {
+      alert('Failed to load application details');
+    }
+  };
+
+  // Open schedule interview modal
+  const handleScheduleInterview = (application: Application) => {
+    setSelectedApplication(application);
+    setInterviewForm({
+      interview_type: 'video',
+      scheduled_at: '',
+      duration_minutes: 60,
+      location: '',
+      meeting_link: '',
+    });
+    setShowInterviewModal(true);
+  };
+
+  // Submit interview scheduling
+  const submitInterview = async () => {
+    if (!selectedApplication || !interviewForm.scheduled_at) return;
+    
+    setIsSubmitting(true);
+    try {
+      await api.scheduleInterview(selectedApplication.id, {
+        interview_type: interviewForm.interview_type,
+        scheduled_at: new Date(interviewForm.scheduled_at).toISOString(),
+        duration_minutes: interviewForm.duration_minutes,
+        location: interviewForm.location,
+        meeting_link: interviewForm.meeting_link,
+      });
+      setShowInterviewModal(false);
+      fetchApplications();
+      alert('Interview scheduled successfully!');
+    } catch {
+      alert('Failed to schedule interview');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Download resume
+  const handleDownloadResume = (application: Application) => {
+    const detail = application as Application & { resume?: string | null };
+    if (detail.resume) {
+      window.open(detail.resume, '_blank');
+    } else {
+      alert('No resume available for this applicant');
+    }
+  };
+
+  // Analyze application
+  const handleAnalyze = async (application: Application) => {
+    setAnalyzingId(application.id);
+    try {
+      const result = await api.analyzeApplication(application.id);
+      fetchApplications();
+      alert(`Analysis complete! Match score: ${result.match_score}%`);
+    } catch {
+      alert('Failed to analyze application');
+    } finally {
+      setAnalyzingId(null);
+    }
   };
 
   return (
@@ -194,9 +287,14 @@ export default function ApplicantsManagementPage() {
                         </span>
                       </div>
                     ) : (
-                      <Button variant="outline" size="sm">
-                        <SparklesIcon className="h-4 w-4 mr-1" />
-                        Analyze
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleAnalyze(application)}
+                        disabled={analyzingId === application.id}
+                      >
+                        <SparklesIcon className={cn('h-4 w-4 mr-1', analyzingId === application.id && 'animate-spin')} />
+                        {analyzingId === application.id ? 'Analyzing...' : 'Analyze'}
                       </Button>
                     )}
                   </div>
@@ -218,20 +316,200 @@ export default function ApplicantsManagementPage() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleViewApplication(application)}
+                      title="View Details"
+                    >
                       <EyeIcon className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm">
-                      <ChatBubbleLeftRightIcon className="h-4 w-4" />
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleScheduleInterview(application)}
+                      title="Schedule Interview"
+                    >
+                      <CalendarDaysIcon className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm">
-                      <DocumentTextIcon className="h-4 w-4" />
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleDownloadResume(application)}
+                      title="Download Resume"
+                    >
+                      <DocumentArrowDownIcon className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+      )}
+
+      {/* Detail Modal */}
+      {showDetailModal && selectedApplication && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Application Details</h2>
+              <Button variant="ghost" size="sm" onClick={() => setShowDetailModal(false)}>
+                <XMarkIcon className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-slate-500">Applicant</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{selectedApplication.applicant_name}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Email</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{selectedApplication.applicant_email}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Job</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{selectedApplication.job_title}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Status</p>
+                  <p className="font-medium text-slate-900 dark:text-white capitalize">{selectedApplication.status}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Applied Date</p>
+                  <p className="font-medium text-slate-900 dark:text-white">
+                    {new Date(selectedApplication.applied_date).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Match Score</p>
+                  <p className={cn('font-medium', getMatchScoreColor(selectedApplication.match_score))}>
+                    {selectedApplication.match_score ? `${selectedApplication.match_score}%` : 'Not analyzed'}
+                  </p>
+                </div>
+              </div>
+              {selectedApplication.cover_letter && (
+                <div>
+                  <p className="text-sm text-slate-500 mb-2">Cover Letter</p>
+                  <p className="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                    {selectedApplication.cover_letter}
+                  </p>
+                </div>
+              )}
+              {selectedApplication.portfolio_url && (
+                <div>
+                  <p className="text-sm text-slate-500">Portfolio</p>
+                  <a href={selectedApplication.portfolio_url} target="_blank" rel="noopener noreferrer" 
+                     className="text-violet-600 hover:underline">{selectedApplication.portfolio_url}</a>
+                </div>
+              )}
+              {selectedApplication.linkedin_url && (
+                <div>
+                  <p className="text-sm text-slate-500">LinkedIn</p>
+                  <a href={selectedApplication.linkedin_url} target="_blank" rel="noopener noreferrer"
+                     className="text-violet-600 hover:underline">{selectedApplication.linkedin_url}</a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule Interview Modal */}
+      {showInterviewModal && selectedApplication && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full">
+            <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Schedule Interview</h2>
+              <Button variant="ghost" size="sm" onClick={() => setShowInterviewModal(false)}>
+                <XMarkIcon className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-slate-600 dark:text-slate-400">
+                Scheduling interview for <strong>{selectedApplication.applicant_name}</strong>
+              </p>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Interview Type
+                </label>
+                <select
+                  value={interviewForm.interview_type}
+                  onChange={(e) => setInterviewForm(prev => ({ ...prev, interview_type: e.target.value }))}
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                >
+                  {interviewTypes.map(type => (
+                    <option key={type.value} value={type.value}>{type.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Date & Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={interviewForm.scheduled_at}
+                  onChange={(e) => setInterviewForm(prev => ({ ...prev, scheduled_at: e.target.value }))}
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Duration (minutes)
+                </label>
+                <input
+                  type="number"
+                  value={interviewForm.duration_minutes}
+                  onChange={(e) => setInterviewForm(prev => ({ ...prev, duration_minutes: parseInt(e.target.value) || 60 }))}
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Meeting Link (optional)
+                </label>
+                <input
+                  type="url"
+                  value={interviewForm.meeting_link}
+                  onChange={(e) => setInterviewForm(prev => ({ ...prev, meeting_link: e.target.value }))}
+                  placeholder="https://meet.google.com/..."
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Location (optional)
+                </label>
+                <input
+                  type="text"
+                  value={interviewForm.location}
+                  onChange={(e) => setInterviewForm(prev => ({ ...prev, location: e.target.value }))}
+                  placeholder="Office address or online"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button variant="outline" className="flex-1" onClick={() => setShowInterviewModal(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1" 
+                  onClick={submitInterview}
+                  disabled={isSubmitting || !interviewForm.scheduled_at}
+                >
+                  {isSubmitting ? 'Scheduling...' : 'Schedule'}
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

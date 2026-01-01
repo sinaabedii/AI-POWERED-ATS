@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, StatCard } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/auth-store';
 import { useMyApplications } from '@/hooks/useApplications';
+import { Application } from '@/lib/api';
 import {
   DocumentTextIcon,
   EyeIcon,
@@ -15,6 +17,7 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   RocketLaunchIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 
 const quickActions = [
@@ -44,6 +47,7 @@ const quickActions = [
 export default function UserDashboardPage() {
   const { user } = useAuthStore();
   const { applications, isLoading, stats } = useMyApplications();
+  const [selectedApp, setSelectedApp] = useState<Application | null>(null);
 
   return (
     <div className="space-y-8">
@@ -156,7 +160,7 @@ export default function UserDashboardPage() {
                           )}
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => setSelectedApp(application)}>
                         <EyeIcon className="h-4 w-4" />
                       </Button>
                     </div>
@@ -239,6 +243,64 @@ export default function UserDashboardPage() {
           </Card>
         </div>
       </div>
+
+      {/* Application Detail Modal */}
+      {selectedApp && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Application Details</h2>
+              <Button variant="ghost" size="sm" onClick={() => setSelectedApp(null)}>
+                <XMarkIcon className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <p className="text-sm text-slate-500">Job Title</p>
+                <p className="font-semibold text-slate-900 dark:text-white text-lg">{selectedApp.job_title}</p>
+              </div>
+              <div>
+                <p className="text-sm text-slate-500">Company</p>
+                <p className="font-medium text-slate-900 dark:text-white">{selectedApp.job_company}</p>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <p className="text-sm text-slate-500">Status</p>
+                  <StatusBadge status={selectedApp.status} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-slate-500">Applied Date</p>
+                  <p className="font-medium text-slate-900 dark:text-white">
+                    {new Date(selectedApp.applied_date).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+              {selectedApp.match_score && (
+                <div>
+                  <p className="text-sm text-slate-500">Match Score</p>
+                  <div className="flex items-center gap-2">
+                    <SparklesIcon className="h-5 w-5 text-violet-500" />
+                    <span className="font-semibold text-violet-600">{selectedApp.match_score}%</span>
+                  </div>
+                </div>
+              )}
+              {selectedApp.cover_letter && (
+                <div>
+                  <p className="text-sm text-slate-500 mb-2">Cover Letter</p>
+                  <p className="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 p-4 rounded-lg text-sm">
+                    {selectedApp.cover_letter}
+                  </p>
+                </div>
+              )}
+              <div className="pt-4">
+                <Link href={`/jobs/${selectedApp.job_slug || selectedApp.job}`}>
+                  <Button className="w-full">View Job Details</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

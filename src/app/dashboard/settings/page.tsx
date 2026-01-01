@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/auth-store';
 import { useThemeStore } from '@/store/theme-store';
 import { useUserSkills, useUserExperiences } from '@/hooks/useProfile';
+import api from '@/lib/api';
 import {
   UserIcon,
   BellIcon,
@@ -22,6 +23,8 @@ import {
   BriefcaseIcon,
   PlusIcon,
   TrashIcon,
+  DocumentArrowUpIcon,
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 
@@ -40,7 +43,7 @@ const integrations = [
 ];
 
 export default function SettingsPage() {
-  const { user, updateProfile, changePassword, isLoading, error, clearError } = useAuthStore();
+  const { user, updateProfile, changePassword, isLoading, error, clearError, refreshUser } = useAuthStore();
   const { theme, setTheme } = useThemeStore();
   const { skills, addSkill, deleteSkill, isLoading: skillsLoading } = useUserSkills();
   const { experiences, addExperience, deleteExperience, isLoading: expLoading } = useUserExperiences();
@@ -67,9 +70,14 @@ export default function SettingsPage() {
     confirm_password: '',
   });
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeUrl, setResumeUrl] = useState<string | null>(user?.resume_url || null);
+  const [uploadingResume, setUploadingResume] = useState(false);
+  const resumeInputRef = useRef<HTMLInputElement>(null);
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: UserIcon },
+    { id: 'resume', label: 'Resume', icon: DocumentTextIcon },
     { id: 'skills', label: 'Skills', icon: AcademicCapIcon },
     { id: 'experience', label: 'Experience', icon: BriefcaseIcon },
     { id: 'notifications', label: 'Notifications', icon: BellIcon },
@@ -243,6 +251,104 @@ export default function SettingsPage() {
                     {isLoading ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Resume */}
+          {activeTab === 'resume' && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <DocumentTextIcon className="h-5 w-5 text-violet-500" />
+                  Resume / CV
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 space-y-6">
+                <p className="text-slate-600 dark:text-slate-400">
+                  Upload your resume to apply for jobs faster. Supported formats: PDF, DOC, DOCX (Max 5MB)
+                </p>
+                
+                {/* Current Resume */}
+                {resumeUrl && (
+                  <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <DocumentTextIcon className="h-8 w-8 text-emerald-600" />
+                        <div>
+                          <p className="font-medium text-slate-900 dark:text-white">Resume uploaded</p>
+                          <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-violet-600 hover:underline">
+                            View Resume
+                          </a>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" onClick={() => setResumeUrl(null)}>
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Upload Area */}
+                <div 
+                  className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center hover:border-violet-500 transition-colors cursor-pointer"
+                  onClick={() => resumeInputRef.current?.click()}
+                >
+                  <input
+                    ref={resumeInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) setResumeFile(file);
+                    }}
+                  />
+                  <DocumentArrowUpIcon className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <p className="text-slate-600 dark:text-slate-400 mb-2">
+                    {resumeFile ? resumeFile.name : 'Click to upload or drag and drop'}
+                  </p>
+                  <p className="text-sm text-slate-500">PDF, DOC, DOCX up to 5MB</p>
+                </div>
+                
+                {resumeFile && (
+                  <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <DocumentTextIcon className="h-6 w-6 text-violet-500" />
+                      <div>
+                        <p className="font-medium text-slate-900 dark:text-white">{resumeFile.name}</p>
+                        <p className="text-sm text-slate-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => setResumeFile(null)}>
+                        Cancel
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        disabled={uploadingResume}
+                        onClick={async () => {
+                          if (!resumeFile) return;
+                          setUploadingResume(true);
+                          try {
+                            const result = await api.uploadResume(resumeFile);
+                            setResumeUrl(result.resume_url);
+                            setResumeFile(null);
+                            await refreshUser(); // Refresh user to get updated resume_url
+                            setSaveSuccess(true);
+                            setTimeout(() => setSaveSuccess(false), 3000);
+                          } catch {
+                            alert('Failed to upload resume');
+                          } finally {
+                            setUploadingResume(false);
+                          }
+                        }}
+                      >
+                        {uploadingResume ? 'Uploading...' : 'Upload'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
